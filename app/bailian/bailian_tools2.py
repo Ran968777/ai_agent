@@ -1,5 +1,5 @@
 from app.bailian.common import llm, chat_prompt_template
-from langchain_core.tools import Tool
+from langchain_core.tools import Tool,tool
 from pydantic import BaseModel, Field
 
 
@@ -8,21 +8,21 @@ class AddSchema(BaseModel):
     b: int = Field(description="The second integer to add")
 
 
+@tool(
+    description="""Add two integers. Use this tool to calculate the sum of two numbers. Inputs should be 'a' and 'b'.""",
+    args_schema=AddSchema,
+    return_direct=True
+)
 def add(a: int, b: int) -> int:
     """Add two integers."""
     return a + b
 
-
-# 把上面的func转为langchain可以理解的tool
-add_tools = Tool.from_function(
-    func=add,
-    name="add",
-    description="Add two integers.",
-    args_schema=AddSchema
-)
+#
+def create_calc_tools():
+    return [add]
 
 # 将模型和tool绑定
-llm_with_tools= llm.bind_tools([add_tools])
+llm_with_tools= llm.bind_tools([add])
 
 chain = chat_prompt_template | llm_with_tools
 
@@ -46,7 +46,7 @@ for tool_calls in resp.tool_calls:
 
     tool_func = tools_dict[func_name]
 
-    tool_result = tool_func(**args)
+    tool_result = tool_func.invoke(args)
     print(tool_result)
 #
 # 以上是传统的方式比较，简单
