@@ -28,7 +28,7 @@ class AddSchema(BaseModel):
 @tool(
     description="""Add two integers. Use this tool to calculate the sum of two numbers. Inputs should be 'a' and 'b'.""",
     args_schema=AddSchema,
-    return_direct=True
+    return_direct=False,
 )
 def add(a: int, b: int) -> int:
     """Add two integers."""
