@@ -7,7 +7,8 @@ from app.bailian.common import create_calc_tools, llm, chat_prompt_template
 
 class Output(BaseModel):
     args: str = Field(description="用户问题中涉及的计算参数，例如 '100, 200'")
-    result: str = Field(description="经过计算后的最终数值结果")
+    result: str = Field(description="经过计算后的最终数值结果"),
+    think: str = Field(description="计算过程中的思考和解释")
 
 
 parser = JsonOutputParser(pydantic_object=Output)
