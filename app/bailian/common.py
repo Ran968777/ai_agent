@@ -4,8 +4,8 @@ from langchain_openai import ChatOpenAI
 from pydantic import SecretStr, BaseModel, Field
 
 llm = ChatOpenAI(
-    model="deepseek-v3.2",
-    api_key=SecretStr("sk-5a06abe7121c485a9f4f6a8e5748ae2f"),
+    model="qwen3-235b-a22b",
+    api_key=SecretStr("sk-c22000b794334c718c11e41241589914"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
     streaming=True,
 )
