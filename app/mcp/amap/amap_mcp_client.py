@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from langchain.agents import initialize_agent, AgentType
 from langchain_core.prompts import ChatMessagePromptTemplate, PromptTemplate
 
-from app.bailian.common import llm
+
+from app.bailian.common import llm, file_tools
 
 # Load environment variables from .env file
 load_dotenv()
@@ -33,7 +34,7 @@ async def create_and_run_agent():
     client, tools = await create_mcp_client()
 
     agent = initialize_agent(
-        tools=tools,
+        tools=tools + file_tools,
         llm=llm,
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
@@ -54,6 +55,7 @@ async def create_and_run_agent():
         - 网页使用简约美观页面风格，景区图片以卡片展示。
     - 行程规划结果在高德地图app展示，并集成到h5页面中。
     - 同一天行程景区之间我想打车前往。
+    - 以上的结果输出到根目录下一个guide.html中
     """)
 
     print("prompt\n", prompt)

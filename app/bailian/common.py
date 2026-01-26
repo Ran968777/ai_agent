@@ -1,3 +1,4 @@
+from langchain_community.agent_toolkits import FileManagementToolkit
 from langchain_core.prompts import ChatMessagePromptTemplate, ChatPromptTemplate
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
@@ -41,3 +42,6 @@ def create_calc_tools():
 
 
 calc_tools = create_calc_tools()
+
+file_toolkit = FileManagementToolkit(root_dir='/Users/ranjiansong/Desktop/skai/py_project/ai_agent/.temp')
+file_tools = file_toolkit.get_tools()
