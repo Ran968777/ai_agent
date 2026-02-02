@@ -6,8 +6,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_community.chat_message_histories import ChatMessageHistory, FileChatMessageHistory
 from langchain_core.runnables import RunnableWithMessageHistory, RunnableConfig, RunnableSequence
 
-from app.agent.model.model import llm_qwen
-from app.agent.prompts.multi_chat_prompts import multi_chat_prompt
+from app.code_agent.model.model import llm_qwen
+from app.code_agent.prompts.multi_chat_prompts import multi_chat_prompt
 from langchain_community.agent_toolkits.file_management import FileManagementToolkit
 from langgraph.prebuilt import create_react_agent
 
@@ -28,16 +28,16 @@ def get_file_session_history(session_id: str):
 
 
 # define file tools
-file_toolkit = FileManagementToolkit(root_dir="/Users/ranjiansong/Desktop/skai/py_project/ai_agent/.temp")
+file_toolkit = FileManagementToolkit(root_dir="/.temp")
 file_tools = file_toolkit.get_tools()
 
 # llm bind with tools
 llm_with_tools = llm_qwen.bind_tools(file_tools)
 
-# define a agent
+# define a code_agent
 agent = create_react_agent(model=llm_qwen, tools=file_tools)
 
-# Replace llm_with_tools with agent
+# Replace llm_with_tools with code_agent
 # chain = multi_chat_prompt | llm_with_tools | StrOutputParser()
 chain = multi_chat_prompt | agent
 
