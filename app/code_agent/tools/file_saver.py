@@ -46,6 +46,9 @@ class FileSaver(BaseCheckpointSaver[str]):
         dir_path = os.path.join(self.base_path, thread_id)
         checkpoint_files = list(Path(dir_path).glob("*.json"))
         checkpoint_files.sort(key=lambda x: x.stem, reverse=True)
+        if len(checkpoint_files) == 0:
+            return None
+
         latest_checkpoint = checkpoint_files[0]
         checkpoint_id = latest_checkpoint.stem
         checkpoint_path = self._get_checkpoint_path(thread_id, checkpoint_id)
@@ -111,10 +114,17 @@ if __name__ == "__main__":
         model=llm_qwen,
         tools=file_toos,
         checkpointer=memory,
-        debug=True,
+        # debug=True,
     )
     config = RunnableConfig(configurable={
-        "thread_id": 1,
+        "thread_id": 2,
     })
-    resp = agent.invoke(input={"messages": [("user", "我是Sam")]}, config=config)
-    print(resp)
+
+    while True:
+        user_inpt = input("用户：")
+        if user_inpt.lower() == "exit" or user_inpt.lower() == "quit":
+            print("bye！")
+            break
+        resp = agent.invoke(input={"messages": user_inpt}, config=config)
+        print("助理：",resp['messages'][-1].content)
+        print()
