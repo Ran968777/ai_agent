@@ -1,11 +1,18 @@
 import subprocess
 import shlex
+from typing import Annotated
+from pydantic import Field
+
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("Test tools")
 
 
 # subprocess.run()
 # subprocess.Popen
 
-def run_shell_command(command):
+@mcp.tool(name="run_shell", description="Run a shell command")
+def run_shell_command(command: Annotated[str, Field(description="The shell command to run", examples=["ls -la"])]) -> str:
     try:
         # 需要设置 shell=False
         # args = shlex.split(command)
@@ -31,5 +38,6 @@ def run_shell_command_by_popen(command):
 
 if __name__ == "__main__":
     # resp = run_shell_command("rm - asdf")
-    success,failed = run_shell_command_by_popen("ls -la")
-    print(success)
+    # success, failed = run_shell_command_by_popen("ls -la")
+    mcp.run(transport="stdio")
+    # print(success)
